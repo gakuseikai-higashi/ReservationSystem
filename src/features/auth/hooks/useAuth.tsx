@@ -136,7 +136,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (response.ok) {
-        const { access_token: token } = await response.json();
+        const { accessToken: token } = await response.json();
         localStorage.setItem(APP_CONFIG.STORAGE_KEYS.AUTH_TOKEN, token);
         setIsAuthenticated(true);
         return true;

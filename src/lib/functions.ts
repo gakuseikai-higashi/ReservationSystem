@@ -216,9 +216,9 @@ export const getReservationDetail = async (id: number) => {
     startTime: formatTimeToHHMM(data.startTime),
     endTime: formatTimeToHHMM(data.endTime),
     reservationDate: formatDateOnly(data.reservationDate),
-    createdAt: new Date(data.created_at).toLocaleDateString(),
-    actualReturnTime: data.actual_return_time,
-    returnImageUrls: data.return_image_urls,
+    createdAt: new Date(data.createdAt).toLocaleDateString(),
+    actualReturnTime: data.actualReturnTime,
+    returnImageUrls: data.returnImageUrls,
     ...data,
   } as ReservationDetailResponse;
   return resData;
@@ -294,7 +294,7 @@ export const getReservationCancelReturnPageData = async (action: string, token: 
   const resData = {
     startTime: formatTimeToHHMM(data.startTime),
     endTime: formatTimeToHHMM(data.endTime),
-    createdAt: new Date(data.created_at).toLocaleDateString(),
+    createdAt: new Date(data.createdAt).toLocaleDateString(),
     ...data,
   } as ReservationDetailResponse;
   return resData;

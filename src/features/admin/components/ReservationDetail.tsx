@@ -198,10 +198,6 @@ const ReservationDetail = ({ id, onClose }: ReservationDetailProps) => {
     setSelectedImage(null);
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   try {
     return (
       <Root

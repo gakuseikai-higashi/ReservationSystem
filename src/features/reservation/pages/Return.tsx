@@ -34,7 +34,7 @@ import {
 } from 'react-icons/lu';
 import { getReservationCancelReturnPageData, updateReservationStatus } from '@/lib/functions';
 import { ReservationDetailResponse } from '@/shared/types';
-import { formatRoomLabel } from '@/shared/utils';
+import { formatDateToJapanese, formatRoomLabel, formatTimeToHHMM } from '@/shared/utils';
 
 export default function Return() {
   const { token } = useParams<{ token: string }>();
@@ -165,9 +165,9 @@ export default function Return() {
 
     try {
       const formData = new FormData();
-      formData.append('damage_details', damageDetails);
+      formData.append('damageDetails', damageDetails);
       selectedFiles.forEach((file) => {
-        formData.append('return_images', file, file.name);
+        formData.append('returnImages', file, file.name);
       });
 
       for (const data of formData.entries()) {
@@ -285,7 +285,7 @@ export default function Return() {
                           <Text>使用日</Text>
                         </HStack>
                       </Table.Cell>
-                      <Table.Cell>{data.reservationDate}</Table.Cell>
+                      <Table.Cell>{formatDateToJapanese(data.reservationDate)}</Table.Cell>
                     </Table.Row>
 
                     <Table.Row>
@@ -296,7 +296,7 @@ export default function Return() {
                         </HStack>
                       </Table.Cell>
                       <Table.Cell>
-                        {data.startTime} ～ {data.endTime}
+                        {formatTimeToHHMM(data.startTime)} ～ {formatTimeToHHMM(data.endTime)}
                       </Table.Cell>
                     </Table.Row>
 

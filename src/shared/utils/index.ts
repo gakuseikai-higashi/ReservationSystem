@@ -8,35 +8,27 @@ export const formatRoomLabel = (room: string): string => {
 
 /**
  * 予約ステータスに応じたバッジ情報を返す
- * 英語キー (PENDING 等) と日本語の両方に対応
+ * 内部状態は英語キー (PENDING 等) で管理し、表示ラベルのみ日本語にする
  */
 export const getStatusBadgeInfo = (
   status: string,
 ): { color: string; label: string; variant: 'solid' | 'outline' | 'subtle' } => {
   switch (status) {
     case 'PENDING':
-    case '承認待ち':
       return { color: 'orange', label: '承認待ち', variant: 'solid' };
     case 'APPROVED':
-    case '承認済み':
       return { color: 'blue', label: '承認済み', variant: 'solid' };
     case 'USING':
-    case '使用中':
       return { color: 'green', label: '使用中', variant: 'solid' };
     case 'WAITED':
-    case '返却待ち':
       return { color: 'purple', label: '返却待ち', variant: 'solid' };
     case 'RETURNED':
-    case '返却済み':
       return { color: 'teal', label: '返却済み', variant: 'solid' };
     case 'COMPLETED':
-    case '返却確認完了':
       return { color: 'gray', label: '返却確認完了', variant: 'solid' };
     case 'CANCELLED':
-    case 'キャンセル済み':
       return { color: 'red', label: 'キャンセル', variant: 'outline' };
     case 'REJECTED':
-    case '却下済み':
       return { color: 'red', label: '却下済み', variant: 'solid' };
     default:
       return { color: 'gray', label: status || '不明', variant: 'subtle' };

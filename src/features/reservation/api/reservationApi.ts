@@ -164,10 +164,10 @@ export const getReservationDetail = async (id: number): Promise<ReservationDetai
     startTime: formatTimeToHHMM(data.startTime),
     endTime: formatTimeToHHMM(data.endTime),
     reservationDate: formatDateOnly(data.reservationDate),
-    createdAt: new Date(data.created_at).toLocaleDateString(),
+    createdAt: new Date(data.createdAt).toLocaleDateString(),
     roomPassword: data.room_password,
-    actualReturnTime: data.actual_return_time,
-    returnImageUrls: data.return_image_urls,
+    actualReturnTime: data.actualReturnTime,
+    returnImageUrls: data.returnImageUrls,
     ...data,
   } as ReservationDetailResponse;
 };

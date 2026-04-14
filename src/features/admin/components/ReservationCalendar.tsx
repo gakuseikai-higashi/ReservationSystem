@@ -237,7 +237,7 @@ export default function ReservationCalendar({
             {[
               'PENDING',
               'APPROVED',
-              '使用中',
+              'USING',
               'WAITED',
               'RETURNED',
               'COMPLETED',

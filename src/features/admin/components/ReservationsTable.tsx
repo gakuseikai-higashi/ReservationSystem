@@ -33,13 +33,9 @@ export default function ReservationsTable() {
     // 既に完了済みの状態の場合は元の状態のまま
     const currentStatus = String(item.status);
     if (
-      currentStatus === '返却済み' ||
       currentStatus === 'RETURNED' ||
-      currentStatus === '返却確認完了' ||
       currentStatus === 'COMPLETED' ||
-      currentStatus === 'キャンセル済み' ||
       currentStatus === 'CANCELLED' ||
-      currentStatus === '却下済み' ||
       currentStatus === 'REJECTED'
     ) {
       return currentStatus;
@@ -56,9 +52,9 @@ export default function ReservationsTable() {
       reservationDate.getDate(),
     );
 
-    // 過去の予約で承認済みの場合は返却済みとする
-    if (reservationDay < today && (currentStatus === '承認済み' || currentStatus === 'APPROVED')) {
-      return '返却済み';
+    // 過去の予約で承認済みの場合は返却待ちとする
+    if (reservationDay < today && currentStatus === 'APPROVED') {
+      return 'WAITED';
     }
 
     // 今日以外の予約は元の状態のまま
@@ -80,17 +76,17 @@ export default function ReservationsTable() {
 
     // 使用開始前
     if (currentMinutes < startMinutes) {
-      return '承認済み';
+      return 'APPROVED';
     }
 
     // 使用時間内
     if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-      return '使用中';
+      return 'USING';
     }
 
     // 使用時間終了後
     if (currentMinutes >= endMinutes) {
-      return '返却待ち';
+      return 'WAITED';
     }
 
     return currentStatus;
@@ -100,16 +96,16 @@ export default function ReservationsTable() {
   const getStatusBadgeProps = (status: string) => {
     const { color, label, variant } = getStatusBadgeInfo(status);
     const iconMap: Record<string, React.ReactNode> = {
-      '承認待ち': <LuClock size={12} />,
-      '承認済み': <LuCheck size={12} />,
-      '使用中':   <LuPlay size={12} />,
-      '返却待ち': <LuClock size={12} />,
-      '返却済み': <LuPackage size={12} />,
-      '返却確認完了': <LuPackage size={12} />,
-      'キャンセル': <LuX size={12} />,
-      '却下済み': <LuX size={12} />,
+      'PENDING':   <LuClock size={12} />,
+      'APPROVED':  <LuCheck size={12} />,
+      'USING':     <LuPlay size={12} />,
+      'WAITED':    <LuClock size={12} />,
+      'RETURNED':  <LuPackage size={12} />,
+      'COMPLETED': <LuPackage size={12} />,
+      'CANCELLED': <LuX size={12} />,
+      'REJECTED':  <LuX size={12} />,
     };
-    return { colorPalette: color, variant, text: label, icon: iconMap[label] ?? null };
+    return { colorPalette: color, variant, text: label, icon: iconMap[status] ?? null };
   };
 
   const fetchData = async () => {
