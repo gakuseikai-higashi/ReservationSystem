@@ -112,7 +112,8 @@ export interface ReservationDetailResponse
     ReservatorInfoBase,
     ReservatorDetailInfoBase,
     ReservationInfoBase,
-    ReservationReturnInfoBase {}
+    ReservationReturnInfoBase,
+    ReservationTokenBase {}
 
 /**
  * 予約キャンセル・返却ページレスポンス

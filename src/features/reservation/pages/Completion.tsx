@@ -96,34 +96,18 @@ export default function Completion() {
               <Heading size="lg" color="blue.600">
                 <Box display="inline-flex" alignItems="center" gap={2}>
                   <LuMail />
-                  <Text>メール送信について</Text>
+                  <Text>今後の流れ</Text>
                 </Box>
               </Heading>
             </Card.Header>
             <Card.Body>
               <VStack gap={4} align="stretch">
-                <Alert.Root status="info">
-                  <Alert.Indicator />
-                  <Box>
-                    <Alert.Title>予約受付完了メールを送信いたします</Alert.Title>
-                    <Alert.Description>
-                      ご入力いただいたメールアドレスに、予約受付完了の確認メールをお送りします。
-                      <br />
-                      メールが届かない場合は、迷惑メールフォルダもご確認ください。
-                    </Alert.Description>
-                  </Box>
-                </Alert.Root>
-
                 <Box p={4} bg="gray.50" borderRadius="md">
                   <VStack gap={2} align="stretch">
-                    <Text fontWeight="bold" fontSize="sm">
-                      今後の流れ：
-                    </Text>
                     <VStack gap={1} align="stretch" pl={4}>
-                      <Text fontSize="sm">① 予約受付完了メールの送信</Text>
-                      <Text fontSize="sm">② 管理者による承認・確認</Text>
-                      <Text fontSize="sm">③ 承認結果のメール通知</Text>
-                      <Text fontSize="sm">④ 予約確定</Text>
+                      <Text fontSize="md">① 管理者による承認・確認</Text>
+                      <Text fontSize="md">② 承認結果のメール通知</Text>
+                      <Text fontSize="md">③ 予約確定</Text>
                     </VStack>
                   </VStack>
                 </Box>
@@ -133,10 +117,13 @@ export default function Completion() {
                   <Box>
                     <Alert.Title>重要なお知らせ</Alert.Title>
                     <Alert.Description>
-                      • 承認結果は1～2営業日以内にメールでお知らせします
+                      • 承認結果はメールでお知らせします
                       <br />
-                      • 予約の変更・キャンセルをご希望の場合は、お早めにご連絡ください
-                      <br />• ご不明な点がございましたら、管理者までお問い合わせください
+                      • キャンセルをご希望の場合は、承認結果メール内のキャンセルページからお手続きください
+                      <br />
+                      • 予約内容の変更をご希望の場合は、一度キャンセルのうえ改めてご申請ください
+                      <br />
+                      • ご不明な点がございましたら、管理者までお問い合わせください
                     </Alert.Description>
                   </Box>
                 </Alert.Root>

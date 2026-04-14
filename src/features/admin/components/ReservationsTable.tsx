@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Box, Stack, Table, VStack, Button, HStack, Badge, Tabs } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import {
@@ -11,6 +11,7 @@ import {
   LuTable,
   LuCalendar,
   LuArrowUpDown,
+  LuArrowUp,
 } from 'react-icons/lu';
 import ReservationsTablePagination from './ReservationsTablePagination';
 import ReservationCalendar from './ReservationCalendar';
@@ -18,6 +19,18 @@ import { getAllReservations } from '@/lib/functions';
 import { ReservationListResponse } from '@/shared/types';
 import { formatRoomLabel, getStatusBadgeInfo, getActualStatus } from '@/shared/utils';
 import ReservationDetail from './ReservationDetail';
+
+// アクションが必要な状態を優先するための優先度マップ
+const STATUS_PRIORITY: Record<string, number> = {
+  PENDING:   0, // 最優先
+  RETURNED:  0, // 最優先
+  APPROVED:  1,
+  USING:     1,
+  WAITED:    1,
+  COMPLETED: 2,
+  CANCELLED: 2,
+  REJECTED:  2,
+};
 
 const MotionTableRow = motion.create(Table.Row);
 
@@ -27,9 +40,10 @@ export default function ReservationsTable() {
   const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState<'table' | 'calendar'>('table');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortKey, setSortKey] = useState<'id' | 'status'>('id');
 
   // 予約状態に応じたバッジの色・ラベル・アイコンを返す関数
-  const getStatusBadgeProps = (status: string) => {
+  const getStatusBadgeProps = useCallback((status: string) => {
     const { color, label, variant } = getStatusBadgeInfo(status);
     const iconMap: Record<string, React.ReactNode> = {
       'PENDING':   <LuClock size={12} />,
@@ -42,9 +56,9 @@ export default function ReservationsTable() {
       'REJECTED':  <LuX size={12} />,
     };
     return { colorPalette: color, variant, text: label, icon: iconMap[status] ?? null };
-  };
+  }, []);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getAllReservations();
@@ -54,7 +68,7 @@ export default function ReservationsTable() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -95,10 +109,19 @@ export default function ReservationsTable() {
   const totalPages = Math.max(Math.ceil(itemLength / itemsPerPage), 1);
   const startIndex = (currentPage - 1) * itemsPerPage;
 
-  // IDでソート
-  const sortedData = [...data].sort((a, b) => {
+  const getStatusPriority = useCallback((item: ReservationListResponse) => {
+    return STATUS_PRIORITY[getActualStatus(item)] ?? 1;
+  }, []);
+
+  // ソート
+  const sortedData = useMemo(() => [...data].sort((a, b) => {
+    if (sortKey === 'status') {
+      const pd = getStatusPriority(a) - getStatusPriority(b);
+      if (pd !== 0) return pd;
+      return b.id - a.id; // 同一優先度内はID降順（新しい順）
+    }
     return sortOrder === 'desc' ? b.id - a.id : a.id - b.id;
-  });
+  }), [data, sortKey, sortOrder, getStatusPriority]);
 
   const paginatedItems = sortedData.slice(startIndex, startIndex + itemsPerPage);
 
@@ -174,7 +197,7 @@ export default function ReservationsTable() {
                         <span>ID</span>
                         <Box
                           as="button"
-                          onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+                          onClick={() => { setSortKey('id'); setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc'); }}
                           cursor="pointer"
                           _hover={{ color: 'blue.500' }}
                         >
@@ -190,7 +213,6 @@ export default function ReservationsTable() {
                       '使用日',
                       '使用開始時間',
                       '使用終了時間',
-                      '状態',
                     ].map((header, idx) => (
                       <Table.ColumnHeader
                         key={idx}
@@ -201,10 +223,29 @@ export default function ReservationsTable() {
                         {header}
                       </Table.ColumnHeader>
                     ))}
+                    <Table.ColumnHeader textAlign="center" fontWeight="bold" bg="gray.300">
+                      <HStack justify="center" gap={1}>
+                        <span>状態</span>
+                        <Box
+                          as="button"
+                          onClick={() => { if (sortKey !== 'status') setSortKey('status'); }}
+                          cursor="pointer"
+                          _hover={{ color: 'blue.500' }}
+                        >
+                          <LuArrowUp size={12} />
+                        </Box>
+                      </HStack>
+                    </Table.ColumnHeader>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {paginatedItems.map((item, index) => (
+                  {paginatedItems.map((item, index) => {
+                    const actualStatus = getActualStatus(item);
+                    const rowBg =
+                      actualStatus === 'PENDING' || actualStatus === 'RETURNED' ? 'orange.50'   : undefined;
+                    const rowHoverBg =
+                      actualStatus === 'PENDING' || actualStatus === 'RETURNED' ? 'orange.100'   : undefined;
+                    return (
                     <MotionTableRow
                       height="1.6rem"
                       // chakra用
@@ -212,8 +253,10 @@ export default function ReservationsTable() {
                       transitionProperty="background-color"
                       transitionDuration="0.1s"
                       transitionTimingFunction="ease-out"
+                      bg={rowBg}
+                      _hover={rowHoverBg ? { bg: rowHoverBg } : undefined}
                       // framer-motion用
-                      key={item.id}
+                      key={`${sortKey}-${sortOrder}-${item.id}`}
                       initial={{ opacity: 0, x: 0, y: 4 }}
                       animate={{ opacity: 1, x: 0, y: 0 }}
                       exit={{ opacity: 0 }}
@@ -222,7 +265,6 @@ export default function ReservationsTable() {
                         delay: index * 0.05,
                         ease: 'easeOut',
                       }}
-                      layout
                       onClick={() => setOpenDetailId(item.id)}
                     >
                       <Table.Cell textAlign="center">{item.id}</Table.Cell>
@@ -235,7 +277,6 @@ export default function ReservationsTable() {
                       <Table.Cell textAlign="center">{item.endTime}</Table.Cell>
                       <Table.Cell textAlign="center">
                         {(() => {
-                          const actualStatus = getActualStatus(item);
                           const badgeProps = getStatusBadgeProps(actualStatus);
                           return (
                             <Badge
@@ -253,7 +294,8 @@ export default function ReservationsTable() {
                         })()}
                       </Table.Cell>
                     </MotionTableRow>
-                  ))}
+                    );
+                  })}
                 </Table.Body>
               </Table.Root>
             </Table.ScrollArea>

@@ -23,7 +23,7 @@ export default function Footer() {
           </Text>
         </HStack>
         <Text fontSize="xs" color="gray.500">
-          兵庫県立大学商科キャンパス 部室棟予約システム &copy;2025
+          兵庫県立大学商科キャンパス 部室棟予約システム &copy;2026
         </Text>
         <Text fontSize="xs" color="gray.400">
           お問い合わせやシステムの不具合がございましたら、管理者までご連絡ください

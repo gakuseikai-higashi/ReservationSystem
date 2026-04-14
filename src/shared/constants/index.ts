@@ -48,4 +48,7 @@ export const APP_CONFIG = {
   STORAGE_KEYS: {
     AUTH_TOKEN: (import.meta as any).env.VITE_AUTH_TOKEN_KEY || 'admin_auth_token',
   },
+
+  // Gmail 送信アカウント（空の場合はブラウザのデフォルトアカウントを使用）
+  GMAIL_SENDER: (import.meta as any).env.VITE_GMAIL_SENDER || '',
 } as const;

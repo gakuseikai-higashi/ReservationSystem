@@ -18,8 +18,9 @@ export const getActualStatus = (
 ): string => {
   const currentStatus = String(item.status);
 
-  // 終端状態はそのまま返す
+  // 時刻補正の対象外はそのまま返す
   if (
+    currentStatus === 'PENDING' ||
     currentStatus === 'RETURNED' ||
     currentStatus === 'COMPLETED' ||
     currentStatus === 'CANCELLED' ||

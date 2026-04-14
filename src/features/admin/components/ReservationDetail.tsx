@@ -22,6 +22,7 @@ import Loading from '@/shared/components/ui/Loading';
 import ReservationDetailTable from './ReservationDetailTable';
 import DeleteConfirmDialog from '@/shared/components/ui/DeleteConfirmDialog';
 import { formatRoomLabel, formatTimeToHHMM, formatDateOnly } from '@/shared/utils';
+import { APP_CONFIG } from '@/shared/constants';
 
 // 型定義
 interface ReservationDetailProps {
@@ -50,9 +51,15 @@ const buildGmailUrl = (
     '━━━━━━━━━━━━━━━━━━━━━━',
   ].join('\n');
 
+  const baseUrl = window.location.origin;
+  const cancelUrl = `${baseUrl}/cancel/${data.token}`;
+  const returnUrl = `${baseUrl}/return/${data.token}`;
+
+  const signature = '\n\n神戸商科キャンパス 学生会';
+
   const body = isApprove
-    ? `${data.reservatorName} 様\n\nこの度はご予約いただきありがとうございます。\n以下の予約が承認されましたのでお知らせいたします。\n\n${reservationInfo}\n\nご利用当日は時間厳守でお願いいたします。\nご不明な点がございましたら、お気軽にお問い合わせください。\n\nよろしくお願いいたします。`
-    : `${data.reservatorName} 様\n\nこの度はご予約いただきありがとうございます。\n誠に申し訳ありませんが、以下のご予約については却下となりましたのでお知らせいたします。\n\n${reservationInfo}\n\nご不明な点がございましたら、お気軽にお問い合わせください。\n\nよろしくお願いいたします。`;
+    ? `${data.reservatorName} 様\n\nこの度はご予約いただきありがとうございます。\n以下の予約が承認されましたのでお知らせいたします。\n\n${reservationInfo}\n\nご利用当日は時間厳守でお願いいたします。\n\n■ 返却手続き（利用終了後にこちらから）\n${returnUrl}\n\n■ キャンセルはこちら\n${cancelUrl}\n\nご不明な点がございましたら、お気軽にお問い合わせください。\n\nよろしくお願いいたします。${signature}`
+    : `${data.reservatorName} 様\n\nこの度はご予約いただきありがとうございます。\n誠に申し訳ありませんが、以下のご予約については却下となりましたのでお知らせいたします。\n\n${reservationInfo}\n\nご不明な点がございましたら、お気軽にお問い合わせください。\n\nよろしくお願いいたします。${signature}`;
 
   const params = new URLSearchParams({
     view: 'cm',
@@ -60,6 +67,7 @@ const buildGmailUrl = (
     to: data.email,
     su: subject,
     body,
+    ...(APP_CONFIG.GMAIL_SENDER && { authuser: APP_CONFIG.GMAIL_SENDER }),
   });
   return `https://mail.google.com/mail/?${params.toString()}`;
 };
