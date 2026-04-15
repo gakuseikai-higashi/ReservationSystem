@@ -107,8 +107,12 @@ const useReservationActions = (id: number, onClose: () => void, data?: Reservati
   const handleConfirm = useCallback(async () => {
     setIsApproving(true);
     try {
-      await updateReservationStatusAsAdmin(id, 'approve');
-      if (data) window.open(buildGmailUrl('approve', data), '_blank');
+      if (data?.status === ReservationStatus.RETURNED) {
+        await updateReservationStatusAsAdmin(id, 'complete');
+      } else {
+        await updateReservationStatusAsAdmin(id, 'approve');
+        if (data) window.open(buildGmailUrl('approve', data), '_blank');
+      }
       onClose();
     } catch (error) {
       console.error('予約承認に失敗しました:', error);
@@ -325,7 +329,7 @@ const ReservationDetail = ({ id, onClose }: ReservationDetailProps) => {
                   </Box>
                 </Body>
               </Loading>
-              <Footer flexDirection={{ base: 'column', md: 'row' }} gap={{ base: 2, md: 0 }}>
+              <Footer flexDirection={{ base: 'column', md: 'row' }} gap={{ base: 2, md: 2 }}>
                 <Button
                   colorPalette="gray"
                   onClick={onClose}
@@ -345,26 +349,29 @@ const ReservationDetail = ({ id, onClose }: ReservationDetailProps) => {
                 >
                   削除
                 </Button>
-                <Button
-                  colorPalette="orange"
-                  onClick={handleReject}
-                  disabled={data?.status !== ReservationStatus.PENDING || isApproving || isRejecting}
-                  loading={isRejecting}
-                  w={{ base: 'full', md: 'auto' }}
-                  order={{ base: 2, md: 4 }}
-                >
-                  却下
-                </Button>
-                <Button
-                  colorPalette="green"
-                  onClick={handleConfirm}
-                  disabled={data?.status !== ReservationStatus.PENDING || isApproving || isRejecting}
-                  loading={isApproving}
-                  w={{ base: 'full', md: 'auto' }}
-                  order={{ base: 1, md: 5 }}
-                >
-                  承認
-                </Button>
+                {data?.status === ReservationStatus.PENDING && (
+                  <Button
+                    colorPalette="orange"
+                    onClick={handleReject}
+                    loading={isRejecting}
+                    w={{ base: 'full', md: 'auto' }}
+                    order={{ base: 2, md: 4 }}
+                  >
+                    却下
+                  </Button>
+                )}
+                {(data?.status === ReservationStatus.PENDING ||
+                  data?.status === ReservationStatus.RETURNED) && (
+                  <Button
+                    colorPalette="green"
+                    onClick={handleConfirm}
+                    loading={isApproving}
+                    w={{ base: 'full', md: 'auto' }}
+                    order={{ base: 1, md: 5 }}
+                  >
+                    {data?.status === ReservationStatus.RETURNED ? '返却承認' : '承認'}
+                  </Button>
+                )}
               </Footer>
             </Content>
           </Positioner>
