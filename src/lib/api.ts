@@ -33,7 +33,7 @@ const executeLogout = (message?: string) => {
 
 const DEFAULT_CONFIG: Required<ApiConfig> = {
   timeout: 10000, // 10秒
-  retries: 3,
+  retries: 5,
   retryDelay: 1000, // 1秒
 };
 
