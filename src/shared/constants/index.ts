@@ -1,11 +1,11 @@
 import { AvailableTime } from '../types';
 
 /**
- * 1日先から90日先までの日付リスト（土日除外）を生成
+ * 1週間先から1ヶ月先までの日付リスト（土日除外）を生成
  */
-export const DATE_UNTIL_NEXT_MONTH: string[] = Array.from({ length: 90 }, (_, i) => {
+export const DATE_UNTIL_NEXT_MONTH: string[] = Array.from({ length: 24 }, (_, i) => {
   const date = new Date();
-  date.setDate(date.getDate() + i + 1);
+  date.setDate(date.getDate() + i + 7);
   return date;
 }).filter((date) => {
   const day = date.getDay();
@@ -13,9 +13,9 @@ export const DATE_UNTIL_NEXT_MONTH: string[] = Array.from({ length: 90 }, (_, i)
 }).map((date) => date.toISOString().split('T')[0]);
 
 /**
- * 利用可能な時間テーブル（09:00〜17:30, 30分刻み）
+ * 利用可能な時間テーブル（09:00〜20:00, 30分刻み）
  */
-export const TIME_TABLE: AvailableTime[] = Array.from({ length: 18 }, (_, i) => {
+export const TIME_TABLE: AvailableTime[] = Array.from({ length: 22 }, (_, i) => {
   const startHour = 9 + Math.floor((i * 30) / 60);
   const startMinute = (i * 30) % 60;
   const endHour = 9 + Math.floor((i * 30 + 30) / 60);

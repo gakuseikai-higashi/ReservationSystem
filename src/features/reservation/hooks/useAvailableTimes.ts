@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchAvailableTimes } from '@/lib/functions';
 import { AvailableTime, ReservationCreateRequest } from '@/shared/types';
-import { TIME_TABLE } from '@/lib/constants';
+import { TIME_TABLE } from '@/shared/constants';
 
 export const useAvailableTimes = (
   reservationDate: string,

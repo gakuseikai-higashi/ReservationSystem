@@ -1,4 +1,4 @@
-import { TIME_TABLE } from './constants';
+import { TIME_TABLE } from '../shared/constants';
 import {
   AvailableTime,
   ReservationCreateRequest,

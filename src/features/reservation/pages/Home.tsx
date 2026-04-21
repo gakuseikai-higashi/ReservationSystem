@@ -64,7 +64,7 @@ export default function Home() {
                 利用時間
               </Text>
               <Text fontSize="sm" color="gray.600" pl={4}>
-                • 平日： 9:00〜18:00
+                • 平日： 9:00〜20:00
               </Text>
 
               <Text fontSize="md" fontWeight="semibold" mt={4}>
@@ -80,7 +80,7 @@ export default function Home() {
                 予約可能期間
               </Text>
               <Text fontSize="sm" color="gray.600" pl={4}>
-                • 1日前から90日前まで予約可能です
+                • 利用日の1週間前〜1ヶ月前の間に予約できます
               </Text>
             </VStack>
           </Card.Body>

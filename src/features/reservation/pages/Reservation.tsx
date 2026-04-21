@@ -10,7 +10,7 @@ import { SelectItems } from '@/shared/components/form/SelectItems';
 import { ShowAvailableTime } from '../components/ShowAvailableTime';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { DATE_UNTIL_NEXT_MONTH, TIME_TABLE } from '@/lib/constants';
+import { DATE_UNTIL_NEXT_MONTH, TIME_TABLE } from '@/shared/constants';
 import { ReservationCreateRequest } from '@/shared/types';
 import { formatRoomLabel } from '@/shared/utils';
 import { useAvailableTimes } from '../hooks/useAvailableTimes';
