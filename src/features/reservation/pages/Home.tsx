@@ -64,23 +64,25 @@ export default function Home() {
                 利用時間
               </Text>
               <Text fontSize="sm" color="gray.600" pl={4}>
-                • 平日： 9:00〜20:00
+                • 9:00〜20:00
               </Text>
 
               <Text fontSize="md" fontWeight="semibold" mt={4}>
                 利用ルール
               </Text>
               <Text fontSize="sm" color="gray.600" pl={4}>
-                • キャンセルは使用日の前日までにお願いします
-                <br />• 利用後は必ず清掃・整理整頓をお願いします
-                <br />• 利用終了時には部屋の状況を撮影し、返却時にアップロードしてください
+                • キャンセルは使用日の3日前までにお願いします
+                <br />
+                • 利用後は必ず清掃・整理整頓をお願いします
+                <br />
+                • 利用終了時には部屋の状況を撮影し、返却時にアップロードしてください
               </Text>
 
               <Text fontSize="md" fontWeight="semibold" mt={4}>
                 予約可能期間
               </Text>
               <Text fontSize="sm" color="gray.600" pl={4}>
-                • 利用日の1週間前〜1ヶ月前の間に予約できます
+                • 利用日の2週間前〜1ヶ月前の間に予約できます
               </Text>
             </VStack>
           </Card.Body>

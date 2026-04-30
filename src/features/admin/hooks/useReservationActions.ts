@@ -10,13 +10,12 @@ export const buildGmailUrl = (
 ): string => {
   const isApprove = action === 'approve';
   const subject = isApprove
-    ? `【承認】ミーティングルーム予約のお知らせ（予約番号：${data.id}）`
-    : `【却下】ミーティングルーム予約のお知らせ（予約番号：${data.id}）`;
+    ? `【承認】ミーティングルーム予約のお知らせ`
+    : `【却下】ミーティングルーム予約のお知らせ`;
 
   const reservationInfo = [
     '━━━━━━━━━━━━━━━━━━━━━━',
     '【予約内容】',
-    `予約番号：${data.id}`,
     `部屋：${formatRoomLabel(data.room)}`,
     `日時：${formatDateOnly(data.reservationDate)}　${formatTimeToHHMM(data.startTime)} 〜 ${formatTimeToHHMM(data.endTime)}`,
     `利用人数：${data.numPeople}名`,

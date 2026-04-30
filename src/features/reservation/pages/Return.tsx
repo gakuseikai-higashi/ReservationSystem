@@ -71,12 +71,16 @@ export default function Return() {
   };
 
   if (displayError && !data) {
+    const [errorTitle, ...errorRest] = displayError.split(': ');
+    const errorDescription = errorRest.join(': ');
     return (
       <PageContainer title="エラー" titleColor="red.700">
         <Alert.Root status="error">
           <Alert.Indicator />
-          <Alert.Title>エラー</Alert.Title>
-          <Alert.Description>{displayError}</Alert.Description>
+          <Box>
+            <Alert.Title>{errorTitle}</Alert.Title>
+            {errorDescription && <Alert.Description>{errorDescription}</Alert.Description>}
+          </Box>
         </Alert.Root>
         <PageActions delay={0.1}>
           <Button onClick={handleGoHome}>戻る</Button>

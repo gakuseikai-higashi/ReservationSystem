@@ -20,14 +20,13 @@ const handleApiError = async (response: Response, operation: string) => {
 
   try {
     const errorData = JSON.parse(errorText);
-    errorDetail = errorData.detail || errorText;
+    errorDetail = errorData.detail || errorData.error || errorText;
   } catch {
     errorDetail = errorText;
   }
 
   console.error(`Status: ${response.status}, Error: ${errorDetail}`);
-  alert(`${operation}に失敗しました\nMessage: ${errorDetail}`);
-  throw new ApiError(`${operation}に失敗しました: ${errorDetail}`);
+  throw new ApiError(`${operation}に失敗しました: ${errorDetail}`, response.status);
 };
 
 // 時間文字列をHH:MM形式にフォーマットするヘルパー関数

@@ -5,7 +5,7 @@ import PageContainer from '@/shared/components/layout/PageContainer';
 import AnimatedCard from '@/shared/components/ui/AnimatedCard';
 import PageActions from '@/shared/components/ui/PageActions';
 import { LuCalendar, LuClock, LuUsers, LuMapPin, LuUser, LuBuilding2 } from 'react-icons/lu';
-import { formatRoomLabel } from '@/shared/utils';
+import { formatRoomLabel, formatTimeToHHMM, formatDateToJapanese } from '@/shared/utils';
 import { useCancelReservation } from '../hooks/useCancelReservation';
 
 export default function Cancel() {
@@ -93,7 +93,7 @@ export default function Cancel() {
                           <Text>使用日</Text>
                         </HStack>
                       </Table.Cell>
-                      <Table.Cell>{data.reservationDate}</Table.Cell>
+                      <Table.Cell>{formatDateToJapanese(data.reservationDate)}</Table.Cell>
                     </Table.Row>
 
                     <Table.Row>
@@ -103,9 +103,7 @@ export default function Cancel() {
                           <Text>使用時間</Text>
                         </HStack>
                       </Table.Cell>
-                      <Table.Cell>
-                        {data.startTime} ～ {data.endTime}
-                      </Table.Cell>
+                      <Table.Cell>{formatTimeToHHMM(data.startTime)} ～ {formatTimeToHHMM(data.endTime)}</Table.Cell>
                     </Table.Row>
 
                     <Table.Row>
@@ -137,7 +135,8 @@ export default function Cancel() {
                     • キャンセル後は同じ時間帯の予約を再度取ることはできません
                     <br />
                     • キャンセルの取り消しはできません
-                    <br />• 緊急時を除き、使用日の前日までにキャンセルしてください
+                    <br />
+                    • 緊急時を除き、使用日の3日前までにキャンセルしてください
                   </Alert.Description>
                 </Box>
               </Alert.Root>

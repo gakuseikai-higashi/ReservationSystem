@@ -233,7 +233,8 @@ export default function Reservation() {
                     • 承認結果はメールでお知らせします
                     <br />
                     • 利用後は必ず部屋の清掃・整理整頓をお願いします
-                    <br />• キャンセルは使用日の前日までにお願いします
+                    <br />
+                    • キャンセルは使用日の3日前までにお願いします
                   </Alert.Description>
                 </Box>
               </Alert.Root>

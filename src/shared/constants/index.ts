@@ -1,15 +1,12 @@
 import { AvailableTime } from '../types';
 
 /**
- * 1週間先から1ヶ月先までの日付リスト（土日除外）を生成
+ * 2週間先から1ヶ月先までの日付リスト（土日含む）を生成
  */
-export const DATE_UNTIL_NEXT_MONTH: string[] = Array.from({ length: 24 }, (_, i) => {
+export const DATE_UNTIL_NEXT_MONTH: string[] = Array.from({ length: 30 }, (_, i) => {
   const date = new Date();
-  date.setDate(date.getDate() + i + 7);
+  date.setDate(date.getDate() + i + 14);
   return date;
-}).filter((date) => {
-  const day = date.getDay();
-  return day !== 0 && day !== 6; // 日曜(0)・土曜(6)を除外
 }).map((date) => date.toISOString().split('T')[0]);
 
 /**

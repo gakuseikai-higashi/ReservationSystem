@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getReservationCancelReturnPageData, updateReservationStatus } from '@/lib/functions';
+import { ApiError } from '@/lib/api';
 import { ReservationDetailResponse } from '@/shared/types';
 
 export const useReturnReservation = (token: string | undefined) => {
@@ -64,7 +65,10 @@ export const useReturnReservation = (token: string | undefined) => {
       });
     } catch (error) {
       console.error('返却処理に失敗しました:', error);
-      if (error instanceof Error) {
+      if (error instanceof ApiError && error.status === 403) {
+        const detail = error.message.split(': ').slice(1).join(': ');
+        onError(detail || '活動時間が開始してからでないと返却できません。開始時刻以降に再度お試しください。');
+      } else if (error instanceof Error) {
         if (error.message.includes('変換に失敗')) {
           onError(error.message);
         } else if (error.message.includes('ネットワーク')) {
