@@ -41,7 +41,7 @@ export default function Reservation() {
   const room = methods.watch('room');
   const startTime = methods.watch('startTime');
 
-  const { availableTimes } = useAvailableTimes(reservationDate, room, restoredData);
+  const { availableTimes, loading: timesLoading } = useAvailableTimes(reservationDate, room, restoredData);
 
   const studentIdPattern = /^[A-Z]{2}\d{2}[A-Z]\d{3}$/;
   const studentIdMessage = '学籍番号の形式が不正です（例: AB00C000）';
@@ -180,15 +180,22 @@ export default function Reservation() {
                 <Card.Body>
                   <VStack gap={4} align="stretch">
                     {reservationDate && room ? (
-                      <Box
-                        border="1px solid"
-                        borderColor="gray.200"
-                        borderRadius="md"
-                        p={4}
-                        bg="gray.50"
-                      >
-                        <ShowAvailableTime items={availableTimes} split={2} />
-                      </Box>
+                      timesLoading ? (
+                        <Alert.Root status="info">
+                          <Alert.Indicator />
+                          <Alert.Description>利用可能時間を取得中...</Alert.Description>
+                        </Alert.Root>
+                      ) : (
+                        <Box
+                          border="1px solid"
+                          borderColor="gray.200"
+                          borderRadius="md"
+                          p={4}
+                          bg="gray.50"
+                        >
+                          <ShowAvailableTime items={availableTimes} split={2} />
+                        </Box>
+                      )
                     ) : (
                       <Alert.Root status="info">
                         <Alert.Indicator />

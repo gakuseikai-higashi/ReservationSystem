@@ -9,10 +9,12 @@ export const useAvailableTimes = (
   restoredData?: ReservationCreateRequest,
 ) => {
   const [availableTimes, setAvailableTimes] = useState<AvailableTime[]>(TIME_TABLE);
+  const [loading, setLoading] = useState(false);
 
   const getAvailableTime = useCallback(
     async (date: string, roomVal: string, retryCount = 0) => {
       const maxRetries = 3;
+      setLoading(true);
       try {
         const result = await fetchAvailableTimes(date, roomVal);
         setAvailableTimes(result);
@@ -22,10 +24,13 @@ export const useAvailableTimes = (
           setTimeout(() => {
             getAvailableTime(date, roomVal, retryCount + 1);
           }, 1000 * (retryCount + 1));
+          return;
         } else {
           console.error('最大リトライ回数に達しました');
           setAvailableTimes(TIME_TABLE);
         }
+      } finally {
+        setLoading(false);
       }
     },
     [],
@@ -45,5 +50,5 @@ export const useAvailableTimes = (
     }
   }, [restoredData, getAvailableTime]);
 
-  return { availableTimes };
+  return { availableTimes, loading };
 };
